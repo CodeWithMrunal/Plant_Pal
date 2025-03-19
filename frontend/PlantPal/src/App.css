@@ -125,3 +125,52 @@
 .prediction-details p {
   margin: 4px 0;
 }
+
+.info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.tts-button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+}
+
+.tts-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.tts-button:hover:not(:disabled) {
+  background-color: #357abd;
+}
+
+.translation-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.language-select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  min-width: 150px;
+}
+
+.language-select:focus {
+  outline: none;
+  border-color: #4CAF50;
+}

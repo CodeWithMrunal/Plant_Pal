@@ -2,6 +2,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
 from pymongo import MongoClient
+from flask import send_file
+import io
+import base64
 
 app = Flask(__name__)
 CORS(app)
@@ -53,6 +56,7 @@ def translate():
     try:
         data = request.json
         disease_name = data.get('diseaseName')
+        target_language = data.get('targetLanguage', 'hi-IN')
         
         # Get disease info from MongoDB
         disease_info = collection.find_one({'name': disease_name.lower()})
@@ -78,13 +82,13 @@ def translate():
         for text in texts_to_translate:
             payload = {
                 "source_language_code": "en-IN",
-                "target_language_code": "hi-IN",
+                "target_language_code": target_language,
                 "speaker_gender": "Male",
-                "mode": "modern-colloquial",
+                "mode": "classic-colloquial",
                 "model": "mayura:v1",
                 "enable_preprocessing": False,
                 "numerals_format": "international",
-                "output_script": "fully-native",
+                "output_script": "spoken-form-in-native",
                 "input": text
             }
 
@@ -100,6 +104,56 @@ def translate():
             'description': translated_texts[1],
             'cure': translated_texts[2]
         })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/text-to-speech', methods=['POST'])
+def text_to_speech():
+    try:
+        text = request.json.get('text')
+        target_language = request.json.get('targetLanguage', 'hi-IN')
+        
+        # Split text into chunks
+        chunk_size = 500
+        chunks = [text[i:i + chunk_size] for i in range(0, len(text), chunk_size)]
+        
+        # TTS API configuration
+        url = "https://api.sarvam.ai/text-to-speech"
+        headers = {
+            "Content-Type": "application/json",
+            "api-subscription-key": "1c4070b8-7078-4aa2-b45b-14ce2fdf5eb5"
+        }
+        
+        all_audio_data = bytearray()
+        
+        for chunk in chunks:
+            payload = {
+                "inputs": [chunk],
+                "target_language_code": target_language,
+                "speaker": "neel",
+                "model": "bulbul:v1",
+                "pitch": 0,
+                "pace": 1.0,
+                "loudness": 1.0,
+                "enable_preprocessing": True,
+            }
+
+            response = requests.post(url, json=payload, headers=headers)
+            
+            if response.status_code == 200:
+                audio_base64 = response.json()["audios"][0]
+                chunk_audio_data = base64.b64decode(audio_base64)
+                all_audio_data.extend(chunk_audio_data)
+            else:
+                return jsonify({'error': 'TTS API error'}), 500
+
+        return send_file(
+            io.BytesIO(all_audio_data),
+            mimetype='audio/wav',
+            as_attachment=True,
+            download_name='speech.wav'
+        )
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
