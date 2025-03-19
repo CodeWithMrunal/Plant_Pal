@@ -6,7 +6,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Update the ngrok URL generated from Colab
-NGROK_URL = 'https://44d4-35-247-80-222.ngrok-free.app'
+NGROK_URL = 'https://9c7e-35-237-98-250.ngrok-free.app'
 
 @app.route('/predict', methods=['POST'])
 def predict():
