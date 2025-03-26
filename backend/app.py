@@ -15,7 +15,7 @@ db = client['plant_diseases']
 collection = db['diseases']
 
 # Update the ngrok URL generated from Colab
-NGROK_URL = 'https://9c7e-35-237-98-250.ngrok-free.app'
+NGROK_URL = 'https://af3d-35-240-137-6.ngrok-free.app/'
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -74,7 +74,7 @@ def translate():
         # Translation API configuration
         url = "https://api.sarvam.ai/translate"
         headers = {
-            "api-subscription-key": "1c4070b8-7078-4aa2-b45b-14ce2fdf5eb5",
+            "api-subscription-key": "d2eaed29-eb3f-4659-b15b-bb9a50136780",
             "Content-Type": "application/json"
         }
 
@@ -122,7 +122,7 @@ def text_to_speech():
         url = "https://api.sarvam.ai/text-to-speech"
         headers = {
             "Content-Type": "application/json",
-            "api-subscription-key": "1c4070b8-7078-4aa2-b45b-14ce2fdf5eb5"
+            "api-subscription-key": "d2eaed29-eb3f-4659-b15b-bb9a50136780"
         }
         
         all_audio_data = bytearray()
