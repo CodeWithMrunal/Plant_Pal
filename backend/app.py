@@ -15,7 +15,7 @@ db = client['plant_diseases']
 collection = db['diseases']
 
 # Update the ngrok URL generated from Colab
-NGROK_URL = 'https://af3d-35-240-137-6.ngrok-free.app/'
+NGROK_URL = 'https://a9ec-35-221-254-126.ngrok-free.app/'
 
 @app.route('/predict', methods=['POST'])
 def predict():
